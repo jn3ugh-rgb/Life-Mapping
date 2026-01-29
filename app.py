@@ -16,96 +16,6 @@ st.markdown("""
 <style>
     .main-header {font-size: 2.5rem; color: #1E3A8A; text-align: center; font-weight: 700; margin-bottom: 1rem;}
     .sub-header {font-size: 1.2rem; color: #4B5563; text-align: center; margin-bottom: 2rem;}
-    .category-header {color: #1E3A8A; border-bottom: 2px solid #1E3A8A; padding-bottom: 5px; margin-top: 20px;}
-    div.stButton > button:first-child {background-color: #1E3A8A; color: white; border-radius: 8px; font-size: 1.2rem; width: 100%; padding: 0.5rem;}
-    div.stButton > button:hover {background-color: #2563EB; border: none;}
-</style>
-""", unsafe_allow_html=True)
-
-# --- 1. 設問データ (Database) ---
-# ★重要★ ここにご自身の「36問」の文章を貼り付けてください。
-# 現在はカテゴリごとに代表的な質問を入れています。
-questions_data = {
-    "哲学 (Philosophy)": [
-        "私は、「自分にとっての幸せとは何か」を自分の言葉で語れる。",
-        "社会の常識や他人の期待よりも、自分の心の声を優先できている。",
-        "日々の生活の中で、心から「満たされている」と感じる瞬間が多い。",
-        "過去の選択に対して後悔はなく、すべての経験に意味があったと思える。",
-        "もし明日人生が終わるとしても、今の生き方に納得できる。",
-        "自分の「核」となる価値観を言語化できている",
-        "迷った時、立ち返るべき判断基準がある",
-        # ... 残りの質問を追加
-    ],
-    "環境 (Environment)": [
-        "現在の住まいや活動場所は、自分にとって居心地が良く、エネルギーが充電できる場所だ。",
-        "将来への不安に脅かされることなく、安心して暮らせる経済的な基盤がある。",
-        "忙しさに追われることなく、何もしない時間や趣味を楽しむ「余白」がある。",
-        "身の回りには、自分がときめく物や好きな物だけを置いている。",
-        "嫌なことや合わない環境からは、距離を置くことができている。",
-        "心から安らげる居場所（家庭やコミュニティ）がある",
-        "経済的な不安に脅かされることなく生活できている",
-        "自分の能力を発揮できる環境に身を置いている",
-    ],
-    "才能 (Talent)": [
-        "自分が情熱を注げる「強み」や「ギフト」を自覚している",
-        "その才能を使って、他者に貢献している実感がある",
-        "仕事や活動の中で、フロー状態（没頭）になることが多い",
-        "時間を忘れて没頭できることや、やっていて苦にならない「得意なこと」がある。",
-        "自分の才能や強みを使って、誰かに喜んでもらえた経験がある。",
-        "仕事や活動において、無理をして自分を偽ることなく、自然体でいられる。",
-        "「あなたにお願いしたい」「あなたと居たい」と言われる独自の魅力がある。",
-        "新しい知識や体験に触れ、自分をアップデートすることを楽しんでいる。",
-    ],
-    "構想 (Vision)": [
-        "1年後、3年後の理想の未来が鮮明に描けている",
-        "夢や目標に向かって、具体的な計画が進んでいる",
-        "未来のことを考えるとワクワクする",
-        "3年後、5年後に「こうなっていたい」という理想のライフスタイルが描けている。",
-        "夢や目標を実現するために、今日できる小さな一歩を踏み出している。",
-        "「死ぬまでにやりたいことリスト」のような、人生の楽しみの計画がある。",
-        "予期せぬ変化が起きても、「それはそれで面白い」と柔軟に捉えられる。",
-        "未来のことを考えると、不安よりもワクワクする気持ちの方が大きい。",
-    ],
-    "健康 (Vitality)": [
-        "毎日、十分なエネルギーを持って活動できている",
-        "睡眠や食事など、身体のケアを大切にしている",
-        "ストレスを適切に解消し、メンタルが安定している",
-        "毎朝、すっきりとした気分と十分なエネルギーで目覚めている。",
-        "食事は味わってとり、自分の身体が喜ぶものを食べている感覚がある。",
-        "日中、身体の重さやだるさを感じることなく、快適に動けている。",
-        "質の高い睡眠をとるために、夜の過ごし方を大切にしている。",
-        "自分の身体からのサイン（疲れや痛み）に気づき、すぐにケアできている。"
-    ],
-    "繋がり (Connection)": [
-        "本音を話せる信頼できるパートナーや友人がいる",
-        "愛し愛されているという実感がある",
-        "異なる価値観を持つ人とも、建設的な対話ができる",
-        "本音で語り合える家族、パートナー、または友人がそばにいる。",
-        "周囲の人に対して、感謝の気持ちを素直に伝えることができている。",
-        "損得勘定抜きで、誰かのために行動することに喜びを感じる。",
-        "孤独感を感じることは少なく、世界や社会と緩やかにつながっている感覚がある。",
-        "自分とは違う考え方の人も受け入れ、対話を楽しむことができる。",
-    ]
-}
-
-import streamlit as st
-import pandas as pd
-import plotly.graph_objects as go
-import statistics
-
-# --- ページ設定 ---
-st.set_page_config(
-    page_title="Life Mapping Diagnosis",
-    page_icon="🧭",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
-
-# --- CSS (デザイン調整) ---
-st.markdown("""
-<style>
-    .main-header {font-size: 2.5rem; color: #1E3A8A; text-align: center; font-weight: 700; margin-bottom: 1rem;}
-    .sub-header {font-size: 1.2rem; color: #4B5563; text-align: center; margin-bottom: 2rem;}
     .category-header {color: #1E3A8A; border-bottom: 2px solid #1E3A8A; padding-bottom: 5px; margin-top: 20px; font-weight: bold;}
     .feedback-box {background-color: #f8fafc; border-left: 5px solid #1E3A8A; padding: 15px; border-radius: 5px; margin-top: 10px; margin-bottom: 20px;}
     .tag-blue {color: #1d4ed8; font-weight: bold;} 
@@ -116,9 +26,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 1. 設問データ & フィードバックデータ ---
-
-# 質問リスト (36問用プレースホルダー)
+# --- 1. 設問データ (Database) ---
 questions_data = {
     "哲学 (Philosophy)": [
         "私は、「自分にとっての幸せとは何か」を自分の言葉で語れる。",
@@ -128,7 +36,6 @@ questions_data = {
         "もし明日人生が終わるとしても、今の生き方に納得できる。",
         "自分の「核」となる価値観を言語化できている",
         "迷った時、立ち返るべき判断基準がある",
-        # ... 残りの質問を追加
     ],
     "環境 (Environment)": [
         "現在の住まいや活動場所は、自分にとって居心地が良く、エネルギーが充電できる場所だ。",
@@ -268,28 +175,74 @@ def calculate_archetype(scores):
 st.markdown('<div class="main-header">Life Mapping Diagnosis</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">人生の現在地を測る 36の問い</div>', unsafe_allow_html=True)
 
-with st.form("diagnosis_form"):
-    name = st.text_input("お名前 (Name)", placeholder="例: 望 太郎")
-    st.markdown("---")
-    user_scores = {}
+# フォームなし（リアルタイム反映のため）
+name = st.text_input("お名前 (Name)", placeholder="例: 山田 太郎")
+st.markdown("---")
+user_scores = {}
+
+# 選択肢の定義
+options = {
+    1: "全く当てはまらない", 
+    2: "あまり当てはまらない", 
+    3: "どちらとも言えない", 
+    4: "やや当てはまる", 
+    5: "非常に当てはまる"
+}
+
+# カテゴリごとにループ
+for category, q_list in questions_data.items():
+    st.markdown(f'<div class="category-header">{category}</div>', unsafe_allow_html=True)
     
-    # 5件法オプション
-    options = {1: "1. 全く当てはまらない", 2: "2. あまり当てはまらない", 3: "3. どちらとも言えない", 4: "4. やや当てはまる", 5: "5. 非常に当てはまる"}
+    cat_answers = []
+    for i, q_text in enumerate(q_list):
+        # 1. 質問文
+        st.markdown(f"**Q.{i+1} {q_text}**")
+        
+        # スライダーのキーを定義
+        slider_key = f"{category}_{i}"
+        
+        # 現在の値を取得（セッションステートにあればそれを、なければデフォルト3）
+        if slider_key in st.session_state:
+            current_val = st.session_state[slider_key]
+        else:
+            current_val = 3
+        
+        # 2. 全選択肢をスライダーの上に表示 (選択中のみハイライト)
+        legend_html = ""
+        for k, v in options.items():
+            if k == current_val:
+                # 選択中のスタイル
+                if k <= 2: color = "#ef4444"   # 赤
+                elif k == 3: color = "#f97316" # オレンジ
+                else: color = "#3b82f6"        # 青
+                
+                legend_html += f"<span style='color: {color}; font-weight: bold; font-size: 1.1rem; margin: 0 8px; display: inline-block;'>{k}. {v}</span>"
+            else:
+                # 非選択のスタイル
+                legend_html += f"<span style='color: #cbd5e1; font-size: 0.8rem; margin: 0 5px; display: inline-block;'>{k}. {v}</span>"
 
-    for category, q_list in questions_data.items():
-        st.markdown(f'<div class="category-header">{category}</div>', unsafe_allow_html=True)
-        cat_answers = []
-        for i, q_text in enumerate(q_list):
-            val = st.radio(f"Q.{i+1} {q_text}", options.keys(), format_func=lambda x: options[x], horizontal=True, index=2, key=f"{category}_{i}")
-            cat_answers.append(val)
-        user_scores[category] = statistics.mean(cat_answers)
-        st.write("") 
+        st.markdown(f"""
+        <div style="text-align: center; line-height: 1.8; margin-bottom: 5px;">
+            {legend_html}
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # 3. スライダー (ラベルなし)
+        val = st.select_slider(
+            label="回答", 
+            options=[1, 2, 3, 4, 5],
+            value=3, 
+            key=slider_key,
+            label_visibility="collapsed"
+        )
+        
+        cat_answers.append(val)
+    
+    user_scores[category] = statistics.mean(cat_answers)
 
-    st.markdown("---")
-    submitted = st.form_submit_button("診断結果を表示する")
+st.markdown("---")
 
-# --- 4. 結果表示エリア ---
-if submitted:
+if st.button("診断結果を表示する"):
     if not name:
         st.error("お名前を入力してください。")
     else:
@@ -345,7 +298,7 @@ if submitted:
                     </div>
                     """, unsafe_allow_html=True)
                 
-                # フィードバック文章 (Expanderでスッキリ表示)
+                # フィードバック文章
                 with st.expander(f"▼ {cat}のアドバイスを読む"):
                     st.markdown(f'<div class="feedback-box">{feedback_text}</div>', unsafe_allow_html=True)
 
@@ -355,8 +308,8 @@ if submitted:
         st.markdown(f"""
         **{archetype_name}** のあなたへ。
         
-        この診断結果はあくまで「現在地」です。ここからどう歩むべきか、
-        より詳細な処方箋（アドバイス）をnoteにまとめました。
+        この診断結果はあくまで「現在地」です。
+        この診断結果をもとに、より詳細な地図を描いてみませんか？
         
-        **👉 [Life Mapping 公式解説書 (note)](https://note.com/...)**
+        **👉 [Life Mapping Coaching (note)](https://note.com/toyamanchu1986/n/nd31342d61419)**
         """)
