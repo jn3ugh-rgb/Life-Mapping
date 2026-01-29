@@ -175,6 +175,21 @@ def calculate_archetype(scores):
 st.markdown('<div class="main-header">Life Mapping Diagnosis</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">人生の現在地を測る 36の問い</div>', unsafe_allow_html=True)
 
+# ★追加: 導入メッセージエリア
+# ユーザーに安心感を与え、診断への没入感を高めます
+st.markdown("""
+<div style="background-color: #f8fafc; padding: 20px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #1E3A8A; color: #475569;">
+    <p style="margin:0; line-height: 1.8;">
+        ようこそ、Life Mappingへ！<br>
+        この診断は、あなたの人生を構成する<b>6つの要素（哲学・環境・才能・構想・健康・繋がり）</b>の状態を可視化し、
+        今あなたがどのような<b>「アーキタイプ（冒険者としてのタイプ）」</b>を生きているのかを紐解きます。<br><br>
+        <b>所要時間は約2～3分です。</b><br>
+        あまり深く考えすぎず、今の感覚に一番近いものを直感的に選んでください。<br>
+        あなたの現在地を知ることが、理想の未来へ進むための最初の一歩になります。
+    </p>
+</div>
+""", unsafe_allow_html=True)
+
 # フォームなし（リアルタイム反映のため）
 name = st.text_input("お名前 (Name)", placeholder="例: 山田 太郎")
 st.markdown("---")
