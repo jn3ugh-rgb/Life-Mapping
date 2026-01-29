@@ -17,7 +17,18 @@ st.markdown("""
     .main-header {font-size: 2.5rem; color: #1E3A8A; text-align: center; font-weight: 700; margin-bottom: 1rem;}
     .sub-header {font-size: 1.2rem; color: #4B5563; text-align: center; margin-bottom: 2rem;}
     .category-header {color: #1E3A8A; border-bottom: 2px solid #1E3A8A; padding-bottom: 5px; margin-top: 20px; font-weight: bold;}
-    .feedback-box {background-color: #f8fafc; border-left: 5px solid #1E3A8A; padding: 15px; border-radius: 5px; margin-top: 10px; margin-bottom: 20px;}
+    
+    /* ▼ ここを修正しました（colorを追加） */
+    .feedback-box {
+        background-color: #f8fafc; 
+        border-left: 5px solid #1E3A8A; 
+        padding: 15px; 
+        border-radius: 5px; 
+        margin-top: 10px; 
+        margin-bottom: 20px;
+        color: #334155; /* 文字色を強制的に濃い色にする */
+    }
+    
     .tag-blue {color: #1d4ed8; font-weight: bold;} 
     .tag-green {color: #15803d; font-weight: bold;}
     .tag-red {color: #b91c1c; font-weight: bold;}
