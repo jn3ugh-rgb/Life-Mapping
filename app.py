@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 import statistics
 
 st.markdown(
-    '<meta property="og:image" content="Life mapping\Life-Mapping\Life Mapping.png">',
+    '<meta property="og:image" content="https://github.com/jn3ugh-rgb/Life-Mapping/blob/main/Life%20Mapping.png">',
     unsafe_allow_html=True
 )
 
