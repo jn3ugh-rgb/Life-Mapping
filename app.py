@@ -1,29 +1,25 @@
 import streamlit as st
+# --- 1. ページ設定 (アプリ全体の基本設定) ---
 st.set_page_config(
-    page_title="ライフ・ストラテジー診断",
-    page_icon="🗺️",
+    page_title="ライフ・ストラテジー診断 | Life Mapping",
+    page_icon="🧭",
+    layout="wide",
+    initial_sidebar_state="collapsed",
     menu_items={
-        'Get Help': 'https://www.extremelycoolapp.com/help',
-        'Report a bug': "https://www.extremelycoolapp.com/bug",
-        'About': "# ライフ・ストラテジー診断\nあなたの人生の「現在地」を測る。"
+        'Get Help': 'https://note.com/toyamanchu1986/n/nd31342d61419',
+        'Report a bug': None,
+        'About': "# ライフ・ストラテジー診断\nあなたの人生の「現在地」を測り、理想の未来への地図を描きます。"
     }
 )
-import pandas as pd
-import plotly.graph_objects as go
-import statistics
 
+# --- 2. OGP設定 (SNSシェア時のサムネイル) ---
 st.markdown(
     '<meta property="og:image" content="https://github.com/jn3ugh-rgb/Life-Mapping/raw/main/Life%20Mapping.png">',
     unsafe_allow_html=True
 )
-
-# --- ページ設定 ---
-st.set_page_config(
-    page_title="Life Mapping Diagnosis",
-    page_icon="🧭",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+import pandas as pd
+import plotly.graph_objects as go
+import statistics
 
 # --- CSS (デザイン調整) ---
 st.markdown("""
