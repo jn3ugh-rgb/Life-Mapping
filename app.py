@@ -1,7 +1,21 @@
 import streamlit as st
+st.set_page_config(
+    page_title="ライフ・ストラテジー診断",
+    page_icon="🗺️",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'About': "# ライフ・ストラテジー診断\nあなたの人生の「現在地」を測る。"
+    }
+)
 import pandas as pd
 import plotly.graph_objects as go
 import statistics
+
+st.markdown(
+    '<meta property="og:image" content="Life mapping\Life-Mapping\Life Mapping.png">',
+    unsafe_allow_html=True
+)
 
 # --- ページ設定 ---
 st.set_page_config(
