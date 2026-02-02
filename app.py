@@ -16,10 +16,23 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# --- セッションステート初期化 (名前同期用) ---
+if "shared_name" not in st.session_state:
+    st.session_state["shared_name"] = ""
+
+# --- コールバック関数 (同期ロジック) ---
+def sync_name_from_top():
+    """上の入力欄が変更されたら、共有変数に反映"""
+    st.session_state["shared_name"] = st.session_state.name_top
+
+def sync_name_from_bottom():
+    """下の入力欄が変更されたら、共有変数に反映"""
+    st.session_state["shared_name"] = st.session_state.name_bottom
+
 # --- CSS (デザイン調整) ---
 st.markdown("""
 <style>
-    .main-header {font-size: 2.5rem; color: #1E3A8A; text-align: center; font-weight: 700; margin-bottom: 1rem;}
+    .main-header {font-size: 3.0rem; color: #1E3A8A; text-align: center; font-weight: 700; margin-bottom: 1rem;}
     .sub-header {font-size: 1.2rem; color: #4B5563; text-align: center; margin-bottom: 2rem;}
     .category-header {color: #1E3A8A; border-bottom: 2px solid #1E3A8A; padding-bottom: 5px; margin-top: 20px; font-weight: bold;}
     
@@ -45,13 +58,13 @@ st.markdown("""
 # --- UI構築 ---
 
 st.markdown('<div class="main-header">Life Mapping Diagnosis</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">人生の現在地を測る 36の問い</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">人生の現在地を測る 48の問い</div>', unsafe_allow_html=True)
 
 # 導入メッセージエリア
 st.markdown("""
 <div style="background-color: #f8fafc; padding: 20px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #1E3A8A; color: #334155;">
     <p style="margin:0; line-height: 1.8;">
-        ようこそ、Life Mappingへ。<br>
+        ようこそ、Life Mapping診断へ。<br>
         この診断は、あなたの人生を構成する<b>6つの要素（哲学・環境・才能・構想・健康・繋がり）</b>の状態を可視化し、
         今あなたがどのような<b>「アーキタイプ（冒険の原型）」</b>を生きているのかを紐解きます。<br><br>
         <b>所要時間は約3分です。</b><br>
@@ -61,7 +74,15 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-name = st.text_input("お名前 (Name)", placeholder="例: 望 太郎")
+# ▼ 【上部】お名前入力欄 (Top)
+st.text_input(
+    "お名前 (Name)", 
+    key="name_top",
+    value=st.session_state["shared_name"], # 共有変数の値を表示
+    on_change=sync_name_from_top,          # 変更時に同期関数を実行
+    placeholder="例: 山田 太郎"
+)
+
 st.markdown("---")
 user_scores = {}
 
@@ -127,12 +148,24 @@ for category, q_list in questions_data.items():
 
 st.markdown("---")
 
+# ▼ 【下部】お名前入力欄 (Bottom) - 上部と同期
+st.text_input(
+    "お名前 (上部で未入力の場合はこちらへ)", 
+    key="name_bottom",
+    value=st.session_state["shared_name"], # 共有変数の値を表示
+    on_change=sync_name_from_bottom,       # 変更時に同期関数を実行
+    placeholder="例: 山田 太郎"
+)
+
 if st.button("診断結果を表示する"):
-    if not name:
+    # 名前チェックは共有変数を見る
+    if not st.session_state["shared_name"]:
         st.error("お名前を入力してください。")
     else:
-        # アーキタイプ計算ロジック呼び出し
-        archetype_name, description, icon = calculate_archetype(user_scores)
+        name = st.session_state["shared_name"]
+        
+        # ▼ 【重要】 戻り値に「question」を追加して受け取る
+        archetype_name, description, icon, question = calculate_archetype(user_scores)
         
         st.balloons()
         
@@ -153,7 +186,19 @@ if st.button("診断結果を表示する"):
 
         with col2:
             st.markdown(f"### {icon} {archetype_name}")
+            
+            # 説明文（既存）
             st.info(description)
+            
+            # ▼ 【重要】 「あなたへの問い」のデザインを変更（改行・太字・サイズ調整）
+            st.markdown(f"""
+            <div style="background-color: #fff7ed; border-left: 5px solid #f97316; padding: 15px; border-radius: 5px; margin-top: 10px; margin-bottom: 20px; color: #431407;">
+                <span style="font-size: 0.9rem; color: #c2410c;">🤔 あなたへの問い</span>
+                <div style="margin-top: 10px; font-weight: bold; font-size: 1.1rem; line-height: 1.5;">
+                    {question}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
             
             st.markdown("#### Life Elements Analysis")
             
